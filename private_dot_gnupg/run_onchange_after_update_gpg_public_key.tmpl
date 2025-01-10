@@ -1,0 +1,21 @@
+#!/bin/zsh
+
+{{- if eq .chezmoi.os "darwin" }}
+
+# kill any gpg-agents
+# gpg-connect-agent reloadagent /bye
+killall gpg-agent 2>/dev/null
+
+{{- $keyfile := joinPath .chezmoi.homeDir ".gnupg" (printf "gpg-public-key-%v.asc" .pgpkey) }}
+# {{ $keyfile }} hash: {{ include $keyfile | sha256sum }}
+gpg --import {{ $keyfile | quote }}
+
+# trust the key
+gpg --export-ownertrust | sed 's/\({{ .pgpkey | replaceAllRegex "^0x" "" }} \):.*/\1:5:/' | gpg --import-ownertrust
+
+# without this you'll get a no secret key error
+{{- if .yubikeyoverssh | not }}
+gpg --card-status
+{{ end -}}
+
+{{ end -}}

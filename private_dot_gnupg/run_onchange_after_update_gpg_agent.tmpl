@@ -1,0 +1,26 @@
+#!/bin/zsh
+
+{{- if eq .chezmoi.os "darwin" }}
+{{- if ne (env "SSH_AUTH_SOCK") "" }}
+
+export PATH="/opt/homebrew/bin:/bin:/usr/bin"
+
+S_GPG_AGENT_SSH=$(gpgconf --list-dirs agent-ssh-socket 2>&1)
+
+if [[ -z "$SSH_AUTH_SOCK" ]]; then
+    echo "SSH_AUTH_SOCK not set"
+    exit 1
+fi
+
+if [[ ! -L "$SSH_AUTH_SOCK" ]]; then
+  echo "SSH_AUTH_SOCK exists and is not a symlink, recreating"
+  rm "$SSH_AUTH_SOCK" 2>/dev/null
+  ln -s "$S_GPG_AGENT_SSH" "$SSH_AUTH_SOCK"
+elif [[ "$(readlink -f "$SSH_AUTH_SOCK")" != "$S_GPG_AGENT_SSH" ]]; then
+  echo "SSH_AUTH_SOCK is a symlink, but incorrect destination, recreating"
+  rm "$SSH_AUTH_SOCK" 2>/dev/null
+  ln -s "$S_GPG_AGENT_SSH" "$SSH_AUTH_SOCK"
+fi
+
+{{- end }}
+{{- end }}

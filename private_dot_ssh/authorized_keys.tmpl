@@ -1,0 +1,5 @@
+{{- if .yubikeyoverssh -}}
+{{- if contains (printf "/%v" .pgpkey) (output "gpg" "--list-keys") }}
+{{- output "gpg" "--export-ssh-key" .pgpkey }}
+{{- end }}
+{{- end }}

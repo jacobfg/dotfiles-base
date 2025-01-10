@@ -1,0 +1,17 @@
+# This is Git's per-user configuration file.
+[user]
+	name = {{ .name | quote }}
+	email = {{ .email | quote }}
+	signingkey = {{ .pgpkey | quote }}
+
+[commit]
+	gpgsign = true
+
+[gpg]
+	program = /opt/homebrew/bin/gpg
+
+[github]
+	user = jacobfg
+
+[url "git@github.com:"]
+	insteadOf = https://github.com/

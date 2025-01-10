@@ -1,0 +1,6 @@
+{{- $yubikeyoverssh := promptBoolOnce . "yubikeyoverssh" "YubiKey over SSH" -}}
+[data]
+  name = "jacobfg"
+  email = "10949267+jacobfg@users.noreply.github.com"
+  pgpkey = "0x0EE0F0D3807235DC"
+  yubikeyoverssh = {{ $yubikeyoverssh }}

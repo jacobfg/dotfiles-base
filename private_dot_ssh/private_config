@@ -1,0 +1,11 @@
+Match host * exec "/opt/homebrew/bin/gpg-connect-agent UPDATESTARTUPTTY /bye"
+
+Include config.d/*
+
+Host *
+	PubkeyAcceptedKeyTypes +ssh-rsa
+	IdentitiesOnly yes
+	IdentityFile ~/.ssh/id_rsa.pub
+
+Host github.com *.github.com
+	User git
