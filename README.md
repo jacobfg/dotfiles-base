@@ -16,11 +16,10 @@ brew install gnupg pinentry-mac chezmoi
 
 ## Clone and apply dot files, password store
 
-Due to not being able to order, we need ot run _apply_ a few times
+Due to not being able to order, we need ot run _apply_ twice for gnupg & ssh to setup
 
 ```zsh
-chezmoi init https://github.com/jacobfg/dotfiles-base.git
-chezmoi apply && chezmoi apply
+chezmoi init https://github.com/jacobfg/dotfiles-base.git --apply && chezmoi apply
 ```
 
 ## Remote access on MacOS   
