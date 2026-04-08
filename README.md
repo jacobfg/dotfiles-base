@@ -2,11 +2,7 @@
 
 ## Install brew & chezmoi
 
-If testing on UTM (via SSH), you need these environment variables
-
-```zsh
-export SSH_AUTH_SOCK=$(/bin/ls -d /private/tmp/com.apple.launchd.*/Listeners)
-```
+If testing on UTM (via SSH), you need SSH_AUTH_SOCK, pass via SSH config
 
 ```zsh
 export PATH=$PATH:/opt/homebrew/bin
@@ -24,10 +20,8 @@ chezmoi init https://github.com/jacobfg/dotfiles-base.git --apply && chezmoi app
 
 ## Remote access on MacOS   
 
-Enable remote access and it's off to the races once you have an IP
+Set SSH config if not set via SSH config
 
 ```zsh
-# sudo systemsetup -setremotelogin on
-scutil --nwi | sed -n '/..*IPv4/{n;s/.*: //p;}'
-mkdir ~/.gnupg
+export SSH_AUTH_SOCK=$(~/.gnupg/S.gpg-agent.ssh)
 ```
