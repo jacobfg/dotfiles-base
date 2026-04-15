@@ -1,4 +1,8 @@
+{{- if .yubikeyoverssh }}
+Match host * exec "/opt/homebrew/bin/gpg-connect-agent --no-autostart UPDATESTARTUPTTY /bye"
+{{- else }}
 Match host * exec "/opt/homebrew/bin/gpg-connect-agent UPDATESTARTUPTTY /bye"
+{{- end }}
 
 Include config.d/*
 
