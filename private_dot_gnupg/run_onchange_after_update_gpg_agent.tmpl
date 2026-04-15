@@ -14,6 +14,8 @@ fi
 
 if [[ -S "$SSH_AUTH_SOCK" ]] && [[ "$SSH_AUTH_SOCK" == "$S_GPG_AGENT_SSH" ]]; then
   echo "SSH_AUTH_SOCK exists and is a gnupg socket, leaving alone"
+elif [[ -S "$SSH_AUTH_SOCK" ]]; then
+  echo "SSH_AUTH_SOCK is a socket, leaving alone"
 elif [[ ! -L "$SSH_AUTH_SOCK" ]]; then
   echo "SSH_AUTH_SOCK exists and is not a symlink, recreating"
   rm "$SSH_AUTH_SOCK" 2>/dev/null
