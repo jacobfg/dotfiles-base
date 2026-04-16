@@ -1,1 +1,29 @@
-{{- output "ssh-keyscan" "github.com" }}
+{{- $meta := output "curl" "-fsSL" "https://api.github.com/meta" | fromJson -}}
+{{- $githubEd25519Keys := list -}}
+{{- range $key := $meta.ssh_keys -}}
+{{- if hasPrefix "ssh-ed25519 " $key -}}
+{{- $githubEd25519Keys = append $githubEd25519Keys $key -}}
+{{- end -}}
+{{- end -}}
+{{- if eq (len $githubEd25519Keys) 0 -}}
+{{- fail "No GitHub ed25519 host keys found in the GitHub API response" -}}
+{{- end -}}
+
+{{- $matchedLines := list -}}
+{{- range $line := splitList "\n" (output "ssh-keyscan" "-t" "ed25519" "github.com" | trim) -}}
+{{- if $line -}}
+{{- $parts := splitList " " $line -}}
+{{- if ge (len $parts) 3 -}}
+{{- $candidate := printf "%s %s" (index $parts 1) (index $parts 2) -}}
+{{- if has $candidate $githubEd25519Keys -}}
+{{- $matchedLines = append $matchedLines (printf "%s %s %s" (index $parts 0) (index $parts 1) (index $parts 2)) -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{- if eq (len $matchedLines) 0 -}}
+{{- fail "ssh-keyscan returned no github.com ed25519 host key that matches the GitHub API" -}}
+{{- end -}}
+
+{{ join "\n" $matchedLines }}
