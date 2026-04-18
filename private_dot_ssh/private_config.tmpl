@@ -7,9 +7,10 @@ Match host * exec "/opt/homebrew/bin/gpg-connect-agent UPDATESTARTUPTTY /bye"
 Include config.d/*
 
 Host *
+	# TODO: remove once fulled moved to ed25519
 	PubkeyAcceptedKeyTypes +ssh-rsa
 	IdentitiesOnly yes
-	IdentityFile ~/.ssh/id_rsa.pub
+	IdentityFile ~/.ssh/yubikey_{{ if .yubikeyed25519 }}ed25519{{ else }}rsa4096{{ end }}.pub
 
 Host github.com *.github.com
 	User git

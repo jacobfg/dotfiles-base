@@ -1,6 +1,10 @@
 {{- $yubikeyoverssh := promptBoolOnce . "yubikeyoverssh" "YubiKey over SSH" -}}
+{{- $yubikeyed25519 := promptBoolOnce . "yubikeyed25519" "YubiKey openpgp ed25519" -}}
 [data]
   name = "jacobfg"
   email = "10949267+jacobfg@users.noreply.github.com"
-  pgpkey = "0x0EE0F0D3807235DC"
+  pgpkey = "{{ if $yubikeyed25519 }}0x62BD8E8714051D97{{ else }}0x0EE0F0D3807235DC{{ end }}"
+  pgpkey_ed25519 = "0x62BD8E8714051D97"
+  pgpkey_rsa4096 = "0x0EE0F0D3807235DC"
   yubikeyoverssh = {{ $yubikeyoverssh }}
+  yubikeyed25519 = {{ $yubikeyoverssh }}

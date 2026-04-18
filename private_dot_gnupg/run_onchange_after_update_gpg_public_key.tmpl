@@ -2,16 +2,21 @@
 
 {{- if eq .chezmoi.os "darwin" }}
 
-# kill any gpg-agents
-# gpg-connect-agent reloadagent /bye
-killall gpg-agent 2>/dev/null
-
-{{- $keyfile := joinPath .chezmoi.homeDir ".gnupg" (printf "gpg-public-key-%v.asc" .pgpkey) }}
+# ed25519 - new pgp key
+{{- $keyfile := joinPath .chezmoi.homeDir ".gnupg" (printf "gpg-public-key-%v.asc" .pgpkey_ed25519) }}
 # {{ $keyfile }} hash: {{ include $keyfile | sha256sum }}
 gpg --import {{ $keyfile | quote }}
 
 # trust the key
-gpg --export-ownertrust | sed 's/\({{ .pgpkey | replaceAllRegex "^0x" "" }} \):.*/\1:5:/' | gpg --import-ownertrust
+gpg --export-ownertrust | sed 's/\({{ .pgpkey_ed25519 | replaceAllRegex "^0x" "" }} \):.*/\1:5:/' | gpg --import-ownertrust
+
+# rsa4096 - new pgp key
+{{- $keyfile := joinPath .chezmoi.homeDir ".gnupg" (printf "gpg-public-key-%v.asc" .pgpkey_rsa4096) }}
+# {{ $keyfile }} hash: {{ include $keyfile | sha256sum }}
+gpg --import {{ $keyfile | quote }}
+
+# trust the key
+gpg --export-ownertrust | sed 's/\({{ .pgpkey_rsa4096 | replaceAllRegex "^0x" "" }} \):.*/\1:5:/' | gpg --import-ownertrust
 
 # without this you'll get a no secret key error
 {{- if .yubikeyoverssh | not }}

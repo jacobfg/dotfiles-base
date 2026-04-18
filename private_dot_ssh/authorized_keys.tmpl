@@ -1,5 +1,8 @@
 {{- if .yubikeyoverssh -}}
-{{- if contains (printf "/%v" .pgpkey) (output "gpg" "--list-keys") }}
-{{- output "gpg" "--export-ssh-key" .pgpkey }}
+{{- if contains (printf "/%v" .pgpkey_ed25519) (output "gpg" "--list-keys") }}
+{{- output "gpg" "--export-ssh-key" .pgpkey_ed25519 }}
+{{- end }}
+{{- if contains (printf "/%v" .pgpkey_rsa4096) (output "gpg" "--list-keys") }}
+{{- output "gpg" "--export-ssh-key" .pgpkey_rsa4096 }}
 {{- end }}
 {{- end }}

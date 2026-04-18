@@ -1,0 +1,3 @@
+{{- if contains (printf "/%v" .pgpkey_ed25519) (output "gpg" "--list-keys") }}
+{{- output "gpg" "--export-ssh-key" .pgpkey_ed25519 }}
+{{- end }}
