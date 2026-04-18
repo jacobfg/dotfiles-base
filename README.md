@@ -20,8 +20,9 @@ chezmoi init https://github.com/jacobfg/dotfiles-base.git --apply && chezmoi app
 
 ## Remote access on MacOS   
 
-Set SSH config if not set via SSH config
+Set SSH config if not set via SSH config and force GPG to look for a yubicard card
 
 ```zsh
-export SSH_AUTH_SOCK=$(~/.gnupg/S.gpg-agent.ssh)
+export SSH_AUTH_SOCK=$HOME/.gnupg/S.gpg-agent.ssh
+gpg --card-status
 ```
